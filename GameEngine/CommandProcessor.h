@@ -32,7 +32,7 @@ private:
 
 public:
     CommandProcessor(pthread_mutex_t *cmdQMutex);
-    bool QueueCmd(command cmdObj);
+    bool QueueProcessCmd(command cmdObj);
     void CommandProcessorThreadProc();
 };
 

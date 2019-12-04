@@ -5,7 +5,7 @@ CommandProcessor::CommandProcessor(pthread_mutex_t *cmdQMutex) : cmdQ(MAXSIZE), 
     cmdQMutex_ = cmdQMutex;
 }
 
-bool CommandProcessor::QueueCmd(command cmdObj)
+bool CommandProcessor::QueueProcessCmd(command cmdObj)
 {
     pthread_mutex_lock(cmdQMutex_);
     cmdQ[++wrtIndx % MAXSIZE] = cmdObj;
