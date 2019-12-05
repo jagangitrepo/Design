@@ -1,0 +1,1 @@
+ g++ CommandProcessor.cpp MainEntry.cpp -o GameEngine -I prebuilt-dll-2-9-1-release/include -L prebuilt-dll-2-9-1-release/dll/x64 -lpthreadGC2 -std=c++11
