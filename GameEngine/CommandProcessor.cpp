@@ -1,24 +1,32 @@
 #include "CommandProcessor.h"
 
+typedef void* (*THREADFUNCPTR) (void*);
+
 CommandProcessor::CommandProcessor(pthread_mutex_t *cmdQMutex) : cmdQ(MAXSIZE), rdIndx(0), wrtIndx(0), isExit(false)
 {
     cmdQMutex_ = cmdQMutex;
 }
 
-bool CommandProcessor::QueueProcessCmd(command cmdObj)
+bool CommandProcessor::QueueCmd(command cmdObj)
 {
     pthread_mutex_lock(cmdQMutex_);
     cmdQ[++wrtIndx % MAXSIZE] = cmdObj;
     pthread_mutex_unlock(cmdQMutex_);
 }
 
-void CommandProcessor::CommandProcessorThreadProc()
+void CommandProcessor::StartCommandProcessorThread()
 {
-    cout << "CommandProcessorThreadProc: Thread is started !... " << endl;
+    pthread_create(&processorThread, NULL, (THREADFUNCPTR)&CommandProcessorThreadProc, NULL);
+    //pthread_join(processorThread, NULL);
+}
+void* CommandProcessor::CommandProcessorThreadProc(void * data)
+{
+    cout << "CommandProcessorThreadProc: Thread is started ThreadID: "<< endl;
     while (!isExit)
     {
         if (!cmdQ.empty())
         {
+            cout << "CommandProcessorThreadProc: got some data  !... " << endl;
             command cmdObj;
 
             pthread_mutex_lock(cmdQMutex_);
